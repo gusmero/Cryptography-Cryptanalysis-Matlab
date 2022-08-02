@@ -1,5 +1,5 @@
 
-global lenChar;
+
 
 function console_output = caesarChipher()
 
@@ -52,8 +52,13 @@ function console_output = caesarChipher()
     X = ['The cyphertext entropy is ', num2str(ComputeEntropy(clear_text))];
     disp(X)
 
-    JointEntropy()
 
+     l=length(clear_text);
+        uniqueChars = unique(clear_text);   % String s has all unique characters sorted
+        lenChar=length(uniqueChars);
+    H = MutualInformation(clear_text, console_output,lenChar)
+    X = ['The Mutual information is ', num2str(H)];
+    disp(X)
 end
 
 
@@ -113,19 +118,18 @@ function H = ComputeEntropy(s)
     else
         display('Invalid String');
     end
-    display(H)
-    histogram(f)
+   
 end
 
 %% Joint Entropy
 
-function H = JointEntropy(y,x)
+function H = JointEntropy(y,x,lenChar)
     H=0;
     py = computeProbabilities(y);
     px = computeProbabilities(x);
     for i=1:lenChar
         for j=1:lenChar
-            H = H + (py(i)*px(j)* ( log2(1/(py(i)*px(j))) / log2(26)) )
+            H = H + (py(i)*px(j)* ( log2(1/(py(i)*px(j))) / log2(26)) );
         end
     end
 
@@ -135,8 +139,8 @@ end
 
 
 %% Mutual Information
-function H = MutualInformation(Y,X)
+function H = MutualInformation(Y,X,lenChar)
     % Axiom of information theory
-    H = ComputeEntropy(X) + ComputeEntropy(Y) - JointEntropy(X,Y);
+    H = ComputeEntropy(X) + ComputeEntropy(Y) - JointEntropy(X,Y,lenChar);
     
 end
